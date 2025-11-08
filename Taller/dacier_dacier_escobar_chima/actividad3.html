@@ -70,24 +70,9 @@
                 <p>Crea un botón que muestre una alerta con tu nombre y edad</p>
                 <button onclick="miAlerta()">Mi Alerta</button>
 
-                <script>
+                   <script>
                     function miAlerta() {
-                        // 🎯 ESCRIBE TU CÓDIGO AQUÍ
-                        // Usa: alert("Tu mensaje aquí");
-                        //
-                        // PISTA: Una alerta se escribe así:
-                        // alert("Hola, soy Juan y tengo 25 años");
-                        //
-                        // RECUERDA:
-                        // - El texto va entre comillas " "
-                        // - Termina con punto y coma ;
-                        //
-                        // EJEMPLO COMPLETO:
-                        // alert("Hola, soy María González y tengo 22 años");
-                        //
-                        // AHORA TÚ: Escribe tu alerta aquí debajo (borra esta línea y escribe tu código):
-
-                    }
+                         alert("Hola, soy dacier y tengo 38 años");
                 </script>
             </div>
         </div>
@@ -99,16 +84,16 @@
             <div class="caja-ejemplo">
                 <h3>Prompt - Pedir Nombre</h3>
                 <button onclick="pedirNombre()">Pedir mi Nombre</button>
-                <p id="saludoPersonalizado" style="color: #4caf50; font-weight: bold; margin-top: 10px;"></p>
+                <p id="saludoPersonalizado" style="color: #af4c8b; font-weight: bold; margin-top: 10px;"></p>
 
                 <script>
                     function pedirNombre() {
                         // prompt() muestra una ventana para que el usuario escriba algo
-                        let nombre = prompt("¿Cuál es tu nombre?");
+                        let nombre = prompt("¿cual es tu nombre?");
 
                         // Verificamos que el usuario haya escrito algo
                         if (nombre) {
-                            document.getElementById("saludoPersonalizado").textContent =
+                            document.getElementById("saludo personalizado ").textContent =
                                 "¡Hola " + nombre + "! ¡Bienvenido/a!";
                         }
                     }
@@ -120,7 +105,7 @@
                 <h3>🎯 TAREA 2: Pedir edad y mostrar mensaje</h3>
                 <p>Pide la edad del usuario y muestra un mensaje personalizado</p>
                 <button onclick="pedirEdad()">Pedir Edad</button>
-                <p id="mensajeEdad" style="color: #ff9800; font-weight: bold; margin-top: 10px;"></p>
+                <p id="mensajeEdad" style="color: #ff00c3; font-weight: bold; margin-top: 10px;"></p>
 
                 <script>
                     function pedirEdad() {
@@ -148,7 +133,8 @@
                         //
                         // AHORA TÚ: Copia las 2 líneas del ejemplo y pégalas aquí debajo:
 
-
+                       let edad = prompt("¿Cuántos años tienes?");
+                       document.getElementById("mensajeEdad").textContent = "Tienes " + edad + " años";
                     }
                 </script>
             </div>
@@ -162,7 +148,7 @@
                 <!-- SUMA -->
                 <h3>➕ Suma</h3>
                 <button onclick="hacerSuma()">Sumar dos números</button>
-                <p id="resultadoSuma" style="color: #2196f3; font-weight: bold; margin-top: 10px;"></p>
+                <p id="resultadoSuma" style="color: #f321b1; font-weight: bold; margin-top: 10px;"></p>
 
                 <script>
                     function hacerSuma() {
@@ -236,7 +222,12 @@
                         //
                         // AHORA TÚ: Copia los 5 pasos de arriba y pégalos aquí debajo:
 
-
+                        let num1 = prompt("Ingresa el primer número:");
+                        let num2 = prompt("Ingresa el segundo número:");
+                        num1 = Number(num1);
+                        num2 = Number(num2);
+                        let resta = num1 - num2;
+                        document.getElementById("resultadoResta").textContent = num1 + " - " + num2 + " = " + resta;
                     }
                 </script>
             </div>
@@ -267,8 +258,12 @@
                         // document.getElementById("resultadoDivision").textContent = num1 + " ÷ " + num2 + " = " + division;
                         //
                         // AHORA TÚ: Copia los pasos de arriba y pégalos aquí debajo:
-
-
+                        let num1 = prompt("Ingresa el primer número:");
+                        let num2 = prompt("Ingresa el segundo número:");
+                        num1 = Number(num1);
+                        num2 = Number(num2);
+                        let division = num1 / num2;
+                        document.getElementById("resultadoDivision").textContent = num1 + " ÷ " + num2 + " = " + division;
                     }
                 </script>
             </div>
