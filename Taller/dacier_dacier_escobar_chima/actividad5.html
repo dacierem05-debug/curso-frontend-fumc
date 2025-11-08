@@ -39,6 +39,7 @@
             border-radius: 5px;
             font-size: 16px;
             box-sizing: border-box;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
         input:focus,
@@ -46,6 +47,7 @@
         select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.08);
         }
 
         button[type="submit"],
@@ -72,6 +74,53 @@
             margin-top: 15px;
             border-left: 4px solid #2196f3;
         }
+
+        /* Nuevos estilos: validación en tiempo real y mensajes */
+        .error {
+            color: #b00020;
+            font-size: 0.9em;
+            margin-top: 6px;
+            display: block;
+        }
+        .input-valid {
+            border-color: #2e7d32 !important;
+            box-shadow: 0 0 0 3px rgba(46,125,50,0.06);
+        }
+        .input-invalid {
+            border-color: #b00020 !important;
+            box-shadow: 0 0 0 3px rgba(176,0,32,0.06);
+        }
+        .btn-grupo {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .success-msg {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #e6f4ea;
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 260ms ease, transform 260ms ease;
+        }
+        .success-msg.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-volver, .btn-siguiente {
+            display: inline-block;
+            margin: 10px 0;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -97,36 +146,34 @@
             <div class="caja-ejemplo">
                 <h3>Tipos de Input Comunes</h3>
                 <form class="formulario" onsubmit="return false;">
-
                     <!-- INPUT TEXTO -->
                     <div class="campo-formulario">
-                        <label for="nombre">Nombre Completo:</label>
-                        <input type="text" id="nombre" placeholder="Ej: Juan Pérez">
+                        <label for="nombre1">Nombre Completo:</label>
+                        <input type="text" id="nombre1" placeholder="Ej: Juan Pérez">
                     </div>
 
                     <!-- INPUT EMAIL -->
                     <div class="campo-formulario">
-                        <label for="email">Correo Electrónico:</label>
-                        <input type="email" id="email" placeholder="ejemplo@email.com">
-                        <small>Debe ser un email válido</small>
+                        <label for="email1">Email:</label>
+                        <input type="email" id="email1" placeholder="ejemplo@dominio.com">
                     </div>
 
                     <!-- INPUT PASSWORD -->
                     <div class="campo-formulario">
-                        <label for="password">Contraseña:</label>
-                        <input type="password" id="password" placeholder="Mínimo 6 caracteres">
+                        <label for="pass1">Contraseña:</label>
+                        <input type="password" id="pass1" placeholder="Contraseña">
                     </div>
 
                     <!-- INPUT NUMBER -->
                     <div class="campo-formulario">
-                        <label for="edad">Edad:</label>
-                        <input type="number" id="edad" min="1" max="120" placeholder="Ej: 25">
+                        <label for="edad1">Edad:</label>
+                        <input type="number" id="edad1" min="0" placeholder="25">
                     </div>
 
                     <!-- INPUT DATE -->
                     <div class="campo-formulario">
-                        <label for="fecha">Fecha de Nacimiento:</label>
-                        <input type="date" id="fecha">
+                        <label for="nacimiento1">Fecha de Nacimiento:</label>
+                        <input type="date" id="nacimiento1">
                     </div>
 
                     <button type="button" onclick="mostrarDatos1()">Ver Datos</button>
@@ -136,19 +183,20 @@
 
                 <script>
                     function mostrarDatos1() {
-                        let nombre = document.getElementById("nombre").value;
-                        let email = document.getElementById("email").value;
-                        let edad = document.getElementById("edad").value;
-                        let fecha = document.getElementById("fecha").value;
-
-                        let resultado = document.getElementById("resultado1");
-                        resultado.style.display = "block";
-                        resultado.innerHTML = `
-                            <h4>Datos Ingresados:</h4>
+                        const nombre = document.getElementById("nombre1").value || "(vacío)";
+                        const email = document.getElementById("email1").value || "(vacío)";
+                        const pass = document.getElementById("pass1").value ? "●●●●●" : "(vacío)";
+                        const edad = document.getElementById("edad1").value || "(vacío)";
+                        const nac = document.getElementById("nacimiento1").value || "(vacío)";
+                        const div = document.getElementById("resultado1");
+                        div.style.display = "block";
+                        div.innerHTML = `
+                            <h4>Datos Inputs Básicos</h4>
                             <p><strong>Nombre:</strong> ${nombre}</p>
                             <p><strong>Email:</strong> ${email}</p>
-                            <p><strong>Edad:</strong> ${edad} años</p>
-                            <p><strong>Fecha de Nacimiento:</strong> ${fecha}</p>
+                            <p><strong>Contraseña:</strong> ${pass}</p>
+                            <p><strong>Edad:</strong> ${edad}</p>
+                            <p><strong>Nacimiento:</strong> ${nac}</p>
                         `;
                     }
                 </script>
@@ -162,24 +210,21 @@
             <div class="caja-ejemplo">
                 <h3>Listas Desplegables y Áreas de Texto</h3>
                 <form class="formulario" onsubmit="return false;">
-
                     <!-- SELECT -->
                     <div class="campo-formulario">
-                        <label for="ciudad">Ciudad:</label>
-                        <select id="ciudad">
-                            <option value="">-- Selecciona una ciudad --</option>
-                            <option value="medellin">Medellín</option>
-                            <option value="bogota">Bogotá</option>
-                            <option value="cali">Cali</option>
-                            <option value="barranquilla">Barranquilla</option>
-                            <option value="cartagena">Cartagena</option>
+                        <label for="curso2">Selecciona un curso:</label>
+                        <select id="curso2">
+                            <option value="">-- Elige --</option>
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                            <option value="js">JavaScript</option>
                         </select>
                     </div>
 
                     <!-- TEXTAREA -->
                     <div class="campo-formulario">
-                        <label for="comentarios">Comentarios:</label>
-                        <textarea id="comentarios" rows="4" placeholder="Escribe tus comentarios aquí..."></textarea>
+                        <label for="comentario2">Comentario:</label>
+                        <textarea id="comentario2" rows="3" placeholder="Escribe algo..."></textarea>
                     </div>
 
                     <button type="button" onclick="mostrarDatos2()">Ver Datos</button>
@@ -189,15 +234,15 @@
 
                 <script>
                     function mostrarDatos2() {
-                        let ciudad = document.getElementById("ciudad").value;
-                        let comentarios = document.getElementById("comentarios").value;
-
-                        let resultado = document.getElementById("resultado2");
-                        resultado.style.display = "block";
-                        resultado.innerHTML = `
-                            <h4>Datos Ingresados:</h4>
-                            <p><strong>Ciudad:</strong> ${ciudad || "No seleccionada"}</p>
-                            <p><strong>Comentarios:</strong> ${comentarios || "Sin comentarios"}</p>
+                        const cursoSel = document.getElementById("curso2");
+                        const curso = cursoSel.value ? cursoSel.options[cursoSel.selectedIndex].text : "(no seleccionado)";
+                        const comentario = document.getElementById("comentario2").value || "(vacío)";
+                        const div = document.getElementById("resultado2");
+                        div.style.display = "block";
+                        div.innerHTML = `
+                            <h4>Datos Select & Textarea</h4>
+                            <p><strong>Curso elegido:</strong> ${curso}</p>
+                            <p><strong>Comentario:</strong> ${comentario}</p>
                         `;
                     }
                 </script>
@@ -211,43 +256,20 @@
             <div class="caja-ejemplo">
                 <h3>Opciones de Selección</h3>
                 <form class="formulario" onsubmit="return false;">
-
                     <!-- RADIO BUTTONS (solo una opción) -->
                     <div class="campo-formulario">
-                        <label>Género:</label>
-                        <div>
-                            <input type="radio" id="masculino" name="genero" value="masculino">
-                            <label for="masculino" style="display: inline; font-weight: normal;">Masculino</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="femenino" name="genero" value="femenino">
-                            <label for="femenino" style="display: inline; font-weight: normal;">Femenino</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="otro" name="genero" value="otro">
-                            <label for="otro" style="display: inline; font-weight: normal;">Otro</label>
-                        </div>
+                        <label>Modalidad de estudio:</label>
+                        <div><input type="radio" id="modalOn" name="modal" value="Online"><label for="modalOn" style="display:inline;font-weight:normal;">Online</label></div>
+                        <div><input type="radio" id="modalPres" name="modal" value="Presencial"><label for="modalPres" style="display:inline;font-weight:normal;">Presencial</label></div>
+                        <div><input type="radio" id="modalMix" name="modal" value="Mixto"><label for="modalMix" style="display:inline;font-weight:normal;">Mixto</label></div>
                     </div>
 
                     <!-- CHECKBOXES (múltiples opciones) -->
                     <div class="campo-formulario">
-                        <label>Lenguajes de Programación que conoces:</label>
-                        <div>
-                            <input type="checkbox" id="javascript" name="lenguajes" value="JavaScript">
-                            <label for="javascript" style="display: inline; font-weight: normal;">JavaScript</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="python" name="lenguajes" value="Python">
-                            <label for="python" style="display: inline; font-weight: normal;">Python</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="java" name="lenguajes" value="Java">
-                            <label for="java" style="display: inline; font-weight: normal;">Java</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="csharp" name="lenguajes" value="C#">
-                            <label for="csharp" style="display: inline; font-weight: normal;">C#</label>
-                        </div>
+                        <label>Temas de interés:</label>
+                        <div><input type="checkbox" id="chk1" name="temas" value="HTML"><label for="chk1" style="display:inline;font-weight:normal;">HTML</label></div>
+                        <div><input type="checkbox" id="chk2" name="temas" value="CSS"><label for="chk2" style="display:inline;font-weight:normal;">CSS</label></div>
+                        <div><input type="checkbox" id="chk3" name="temas" value="JS"><label for="chk3" style="display:inline;font-weight:normal;">JavaScript</label></div>
                     </div>
 
                     <button type="button" onclick="mostrarDatos3()">Ver Datos</button>
@@ -257,31 +279,20 @@
 
                 <script>
                     function mostrarDatos3() {
-                        // Obtener el radio seleccionado
-                        let genero = "";
-                        let radios = document.getElementsByName("genero");
-                        for (let radio of radios) {
-                            if (radio.checked) {
-                                genero = radio.value;
-                                break;
-                            }
+                        let modalidad = "(no seleccionada)";
+                        const radios = document.getElementsByName("modal");
+                        for (const r of radios) {
+                            if (r.checked) { modalidad = r.value; break; }
                         }
-
-                        // Obtener los checkboxes seleccionados
-                        let lenguajes = [];
-                        let checkboxes = document.getElementsByName("lenguajes");
-                        for (let checkbox of checkboxes) {
-                            if (checkbox.checked) {
-                                lenguajes.push(checkbox.value);
-                            }
-                        }
-
-                        let resultado = document.getElementById("resultado3");
-                        resultado.style.display = "block";
-                        resultado.innerHTML = `
-                            <h4>Datos Ingresados:</h4>
-                            <p><strong>Género:</strong> ${genero || "No seleccionado"}</p>
-                            <p><strong>Lenguajes:</strong> ${lenguajes.length > 0 ? lenguajes.join(", ") : "Ninguno seleccionado"}</p>
+                        const temas = [];
+                        const checks = document.getElementsByName("temas");
+                        for (const c of checks) if (c.checked) temas.push(c.value);
+                        const div = document.getElementById("resultado3");
+                        div.style.display = "block";
+                        div.innerHTML = `
+                            <h4>Datos Selección</h4>
+                            <p><strong>Modalidad:</strong> ${modalidad}</p>
+                            <p><strong>Temas:</strong> ${temas.length ? temas.join(", ") : "(ninguno)"}</p>
                         `;
                     }
                 </script>
@@ -294,28 +305,28 @@
 
             <div class="caja-ejemplo">
                 <h3>Formulario con Validación</h3>
-                <form class="formulario" onsubmit="return validarFormulario(event);">
-
+                <form class="formulario" id="formVal" onsubmit="return validarFormulario(event);">
                     <div class="campo-formulario">
-                        <label for="nombreVal">Nombre (requerido):</label>
-                        <input type="text" id="nombreVal" required>
+                        <label for="nomVal">Nombre (requerido):</label>
+                        <input type="text" id="nomVal" required>
+                        <span id="errNomVal" class="error" style="display:none;"></span>
                     </div>
 
                     <div class="campo-formulario">
                         <label for="emailVal">Email (requerido):</label>
                         <input type="email" id="emailVal" required>
+                        <span id="errEmailVal" class="error" style="display:none;"></span>
                     </div>
 
                     <div class="campo-formulario">
-                        <label for="edadVal">Edad (18-100):</label>
-                        <input type="number" id="edadVal" min="18" max="100" required>
+                        <label for="edadVal">Edad (>=18):</label>
+                        <input type="number" id="edadVal" min="18" required>
+                        <span id="errEdadVal" class="error" style="display:none;"></span>
                     </div>
 
                     <div class="campo-formulario">
-                        <label for="telefonoVal">Teléfono (10 dígitos):</label>
-                        <input type="text" id="telefonoVal" pattern="[0-9]{10}"
-                               placeholder="Ej: 3001234567" required>
-                        <small>Debe tener exactamente 10 números</small>
+                        <label for="msgVal">Mensaje (opcional):</label>
+                        <textarea id="msgVal" rows="3"></textarea>
                     </div>
 
                     <button type="submit">Enviar Formulario</button>
@@ -324,31 +335,38 @@
                 <div id="resultadoVal" class="resultado-formulario" style="display: none;"></div>
 
                 <script>
+                    function validarEmailSimple(email) {
+                        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                    }
+
                     function validarFormulario(event) {
-                        event.preventDefault(); // Evita que se recargue la página
+                        event.preventDefault();
+                        const nombre = document.getElementById("nomVal").value.trim();
+                        const email = document.getElementById("emailVal").value.trim();
+                        const edad = Number(document.getElementById("edadVal").value);
+                        const msg = document.getElementById("msgVal").value.trim();
 
-                        let nombre = document.getElementById("nombreVal").value;
-                        let email = document.getElementById("emailVal").value;
-                        let edad = document.getElementById("edadVal").value;
-                        let telefono = document.getElementById("telefonoVal").value;
+                        let ok = true;
+                        document.getElementById("errNomVal").style.display = "none";
+                        document.getElementById("errEmailVal").style.display = "none";
+                        document.getElementById("errEdadVal").style.display = "none";
 
-                        // Validación adicional
-                        if (telefono.length !== 10) {
-                            alert("El teléfono debe tener exactamente 10 dígitos");
-                            return false;
-                        }
+                        if (!nombre) { document.getElementById("errNomVal").textContent = "Nombre requerido."; document.getElementById("errNomVal").style.display = "block"; ok = false; }
+                        if (!email || !validarEmailSimple(email)) { document.getElementById("errEmailVal").textContent = "Email inválido."; document.getElementById("errEmailVal").style.display = "block"; ok = false; }
+                        if (isNaN(edad) || edad < 18) { document.getElementById("errEdadVal").textContent = "Debes tener al menos 18 años."; document.getElementById("errEdadVal").style.display = "block"; ok = false; }
 
-                        let resultado = document.getElementById("resultadoVal");
-                        resultado.style.display = "block";
-                        resultado.innerHTML = `
-                            <h4>✅ Formulario Enviado Correctamente</h4>
+                        if (!ok) return false;
+
+                        const div = document.getElementById("resultadoVal");
+                        div.style.display = "block";
+                        div.innerHTML = `
+                            <h4>Formulario Validado</h4>
                             <p><strong>Nombre:</strong> ${nombre}</p>
                             <p><strong>Email:</strong> ${email}</p>
-                            <p><strong>Edad:</strong> ${edad} años</p>
-                            <p><strong>Teléfono:</strong> ${telefono}</p>
+                            <p><strong>Edad:</strong> ${edad}</p>
+                            <p><strong>Mensaje:</strong> ${msg || "(vacío)"}</p>
                         `;
-
-                        return false; // Evita el envío real del formulario
+                        return false;
                     }
                 </script>
             </div>
@@ -374,186 +392,280 @@
                 <p>Al enviar, debe mostrar todos los datos ingresados en un div de resultado.</p>
 
                 <!-- 🎯 ESCRIBE TU CÓDIGO AQUÍ -->
-                <!--
-                    PISTA - GUÍA PASO A PASO PARA COMPLETAR EL FORMULARIO:
-
-                    Aquí te doy TODO el código que necesitas. Solo tienes que:
-                    1. Leer cada sección
-                    2. Copiar el código
-                    3. Personalizarlo con tus datos
-
-                    ════════════════════════════════════════════════════════
-                    PARTE 1: CAMPOS DE TEXTO
-                    ════════════════════════════════════════════════════════
-                
-                -->from class="formulario"onsubmit="return" enviarregistro(ever)
-                <!-- Nombre completo -->
-                <div class="campo-formulario">
-                    <label for="nombreReg">Nombre Completo (requerido):</label>
-                    <input type="text" id="nombreReg" required placeholder="Ej: María García López">
-                </div>
-
-                <!-- Email -->
-                <div class="campo-formulario">
-                    <label for="emailReg">Email (requerido):</label>
-                    <input type="email" id="emailReg" required placeholder="ejemplo@email.com">
-                </div>
-
-                <!-- Contraseña -->
-                <div class="campo-formulario">
-                    <label for="passwordReg">Contraseña (mínimo 6 caracteres, requerido):</label>
-                    <input type="password" id="passwordReg" minlength="6" required placeholder="Mínimo 6 caracteres">
-                </div>
-
-                <!-- Edad -->
-                <div class="campo-formulario">
-                    <label for="edadReg">Edad (18-100, requerido):</label>
-                    <input type="number" id="edadReg" min="18" max="100" required>
-                </div>
-
-                <!--
-                    ════════════════════════════════════════════════════════
-                    PARTE 2: SELECT (CIUDAD)
-                    ════════════════════════════════════════════════════════
-                -->
-
-                <div class="campo-formulario">
-                    <label for="ciudadReg">Ciudad:</label>
-                    <select id="ciudadReg" required>
-                        <option value="">-- Selecciona tu ciudad --</option>
-                        <option value="medellin">Medellín</option>
-                        <option value="bogota">Bogotá</option>
-                        <option value="cali">Cali</option>
-                        <option value="barranquilla">Barranquilla</option>
-                        <option value="cartagena">Cartagena</option>
-                    </select>
-                </div>
-
-                <!--
-                    ════════════════════════════════════════════════════════
-                    PARTE 3: RADIO BUTTONS (GÉNERO)
-                    ════════════════════════════════════════════════════════
-                -->
-
-                <div class="campo-formulario">
-                    <label>Género:</label>
-                    <div>
-                        <input type="radio" id="mascReg" name="generoReg" value="masculino" required>
-                        <label for="mascReg" style="display: inline; font-weight: normal;">Masculino</label>
+                <form id="formRegistro" class="formulario" onsubmit="return enviarRegistro(event);">
+                    <!-- Nombre completo -->
+                    <div class="campo-formulario">
+                        <label for="nombreReg">Nombre Completo (requerido):</label>
+                        <input type="text" id="nombreReg" required placeholder="Ej: María García López" class="input-field">
+                        <span id="errorNombre" class="error" style="display:none;"></span>
                     </div>
-                    <div>
-                        <input type="radio" id="femReg" name="generoReg" value="femenino" required>
-                        <label for="femReg" style="display: inline; font-weight: normal;">Femenino</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="otroReg" name="generoReg" value="otro" required>
-                        <label for="otroReg" style="display: inline; font-weight: normal;">Otro</label>
-                    </div>
-                </div>
 
-                <!--
-                    ════════════════════════════════════════════════════════
-                    PARTE 4: CHECKBOXES (INTERESES)
-                    ════════════════════════════════════════════════════════
-                -->
-
-                <div class="campo-formulario">
-                    <label>Intereses (selecciona los que te gusten):</label>
-                    <div>
-                        <input type="checkbox" id="deportesReg" name="interesesReg" value="Deportes">
-                        <label for="deportesReg" style="display: inline; font-weight: normal;">Deportes</label>
+                    <!-- Email -->
+                    <div class="campo-formulario">
+                        <label for="emailReg">Email (requerido):</label>
+                        <input type="email" id="emailReg" required placeholder="ejemplo@email.com" class="input-field">
+                        <span id="errorEmail" class="error" style="display:none;"></span>
                     </div>
-                    <div>
-                        <input type="checkbox" id="musicaReg" name="interesesReg" value="Música">
-                        <label for="musicaReg" style="display: inline; font-weight: normal;">Música</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="lecturaReg" name="interesesReg" value="Lectura">
-                        <label for="lecturaReg" style="display: inline; font-weight: normal;">Lectura</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="viajesReg" name="interesesReg" value="Viajes">
-                        <label for="viajesReg" style="display: inline; font-weight: normal;">Viajes</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="tecnologiaReg" name="interesesReg" value="Tecnología">
-                        <label for="tecnologiaReg" style="display: inline; font-weight: normal;">Tecnología</label>
-                    </div>
-                </div>
 
-                <!--
-                    ════════════════════════════════════════════════════════
-                    PARTE 5: TEXTAREA (BIOGRAFÍA)
-                    ════════════════════════════════════════════════════════
-                -->
+                    <!-- Contraseña -->
+                    <div class="campo-formulario">
+                        <label for="passwordReg">Contraseña (mínimo 6 caracteres, requerido):</label>
+                        <input type="password" id="passwordReg" minlength="6" required placeholder="Mínimo 6 caracteres" class="input-field">
+                        <span id="errorPassword" class="error" style="display:none;"></span>
+                    </div>
 
-                <div class="campo-formulario">
-                    <label for="biografiaReg">Biografía (cuéntanos sobre ti):</label>
-                    <textarea id="biografiaReg" rows="4" placeholder="Escribe una breve descripción sobre ti..."></textarea>
-                </div>
+                    <!-- Edad -->
+                    <div class="campo-formulario">
+                        <label for="edadReg">Edad (18-100, requerido):</label>
+                        <input type="number" id="edadReg" min="18" max="100" required class="input-field">
+                        <span id="errorEdad" class="error" style="display:none;"></span>
+                    </div>
 
+                    <!-- Ciudad (select con opciones) -->
+                    <div class="campo-formulario">
+                        <label for="ciudadReg">Ciudad (requerido):</label>
+                        <select id="ciudadReg" class="input-field" required>
+                            <option value="">-- Selecciona una ciudad --</option>
+                            <option value="medellin">Medellín</option>
+                            <option value="bogota">Bogotá</option>
+                            <option value="cali">Cali</option>
+                        </select>
+                        <span id="errorCiudad" class="error" style="display:none;"></span>
+                    </div>
 
+                    <!-- Género (radio buttons) -->
+                    <div class="campo-formulario">
+                        <label>Género (requerido):</label>
+                        <div>
+                            <input type="radio" id="generoM" name="generoReg" value="Masculino">
+                            <label for="generoM" style="display:inline;font-weight:normal;">Masculino</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="generoF" name="generoReg" value="Femenino">
+                            <label for="generoF" style="display:inline;font-weight:normal;">Femenino</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="generoO" name="generoReg" value="Otro">
+                            <label for="generoO" style="display:inline;font-weight:normal;">Otro</label>
+                        </div>
+                        <span id="errorGenero" class="error" style="display:none;"></span>
+                    </div>
+
+                    <!-- Intereses (checkboxes con al menos 4 opciones) -->
+                    <div class="campo-formulario">
+                        <label>Intereses (selecciona los que te gusten):</label>
+                        <div>
+                            <input type="checkbox" id="frontendReg" name="interesesReg" value="Frontend">
+                            <label for="frontendReg" style="display: inline; font-weight: normal;">Frontend</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="backendReg" name="interesesReg" value="Backend">
+                            <label for="backendReg" style="display: inline; font-weight: normal;">Backend</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="uxReg" name="interesesReg" value="UX/UI">
+                            <label for="uxReg" style="display: inline; font-weight: normal;">UX/UI</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="devopsReg" name="interesesReg" value="DevOps">
+                            <label for="devopsReg" style="display: inline; font-weight: normal;">DevOps</label>
+                        </div>
+                        <span id="errorIntereses" class="error" style="display:none;"></span>
+                    </div>
+
+                    <!-- Biografía -->
+                    <div class="campo-formulario">
+                        <label for="biografiaReg">Biografía:</label>
+                        <textarea id="biografiaReg" rows="4" placeholder="Cuéntanos sobre ti..." class="input-field"></textarea>
+                    </div>
 
                     <button type="submit">Registrarse</button>
+                    <div class="btn-grupo">
+                        <button type="button" id="btnLimpiar" class="btn-enviar" onclick="limpiarRegistro()" style="background:#e0e0e0;color:#222;padding:10px 18px;border-radius:5px;">Limpiar</button>
+                        <span id="successTransient" class="success-msg" aria-hidden="true">Guardado ✓</span>
+                    </div>
                 </form>
 
                 <div id="resultadoRegistro" class="resultado-formulario" style="display: none;"></div>
 
-                <!--
-                    ════════════════════════════════════════════════════════
-                    PARTE 6: JAVASCRIPT - FUNCIÓN PARA PROCESAR EL FORMULARIO
-                    ════════════════════════════════════════════════════════
-
-                    Ahora necesitas completar la función que procesa todos estos datos
-                -->
-
                 <script>
+                    function mostrarError(id, mensaje) {
+                        const el = document.getElementById(id);
+                        if (!el) return;
+                        if (mensaje) {
+                            el.textContent = mensaje;
+                            el.style.display = "block";
+                        } else {
+                            el.textContent = "";
+                            el.style.display = "none";
+                        }
+                    }
+
+                    function validarEmail(email) {
+                        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return re.test(email);
+                    }
+
+                    function setFieldValid(el) {
+                        if (!el) return;
+                        el.classList.remove("input-invalid");
+                        el.classList.add("input-valid");
+                    }
+                    function setFieldInvalid(el) {
+                        if (!el) return;
+                        el.classList.remove("input-valid");
+                        el.classList.add("input-invalid");
+                    }
+                    function clearFieldState(el) {
+                        if (!el) return;
+                        el.classList.remove("input-invalid","input-valid");
+                    }
+
+                    // Validación en tiempo real
+                    (function attachRealtimeValidation(){
+                        const MAP = [
+                            {id: "nombreReg", fn: v => v.trim().length>0, err: "El nombre es requerido."},
+                            {id: "emailReg", fn: v => validarEmail(v.trim()), err: "Email inválido."},
+                            {id: "passwordReg", fn: v => v.length>=6, err: "Mínimo 6 caracteres."},
+                            {id: "edadReg", fn: v => { const n=Number(v); return !isNaN(n)&&n>=18&&n<=100; }, err: "Edad entre 18 y 100."},
+                            {id: "ciudadReg", fn: v => v!=="", err: "Selecciona una ciudad."}
+                        ];
+                        MAP.forEach(item => {
+                            const el = document.getElementById(item.id);
+                            if (!el) return;
+                            el.addEventListener("input", () => {
+                                const ok = item.fn(el.value);
+                                const errId = "error" + item.id.charAt(0).toUpperCase() + item.id.slice(1);
+                                if (ok) {
+                                    mostrarError(errId, "");
+                                    setFieldValid(el);
+                                } else {
+                                    mostrarError(errId, item.err);
+                                    setFieldInvalid(el);
+                                }
+                            });
+                            el.addEventListener("blur", () => {
+                                const ok = item.fn(el.value);
+                                if (!ok) el.classList.add("input-invalid");
+                            });
+                        });
+
+                        // radios and checkboxes: validate change
+                        const radios = document.getElementsByName("generoReg");
+                        for (const r of radios) r.addEventListener("change", () => mostrarError("errorGenero",""));
+                        const checks = document.getElementsByName("interesesReg");
+                        for (const c of checks) c.addEventListener("change", () => {
+                            const any = Array.from(checks).some(ch => ch.checked);
+                            if (any) mostrarError("errorIntereses","");
+                        });
+                    })();
+
                     function enviarRegistro(event) {
-                        event.preventDefault(); // Evita que la página se recargue
+                        event.preventDefault();
 
-                        // 🎯 AHORA TÚ: Completa esta función siguiendo los pasos:
+                        // Limpiar errores previos
+                        ["errorNombre","errorEmail","errorPassword","errorEdad","errorIntereses","errorCiudad","errorGenero"].forEach(id => mostrarError(id,""));
 
-                        // PASO 1: Obtener todos los valores de los campos de texto
-                        let nombre = document.getElementById("nombreReg").value;
-                        let email = document.getElementById("emailReg").value;
-                        let edad = document.getElementById("edadReg").value;
-                        let ciudad = document.getElementById("ciudadReg").value;
-                        let biografia = document.getElementById("biografiaReg").value;
+                        const nombre = document.getElementById("nombreReg").value.trim();
+                        const email = document.getElementById("emailReg").value.trim();
+                        const password = document.getElementById("passwordReg").value;
+                        const edad = document.getElementById("edadReg").value;
+                        const ciudadSelect = document.getElementById("ciudadReg");
+                        const ciudad = ciudadSelect.value;
+                        const ciudadTexto = ciudadSelect.options[ciudadSelect.selectedIndex] ? ciudadSelect.options[ciudadSelect.selectedIndex].text : "";
+                        const biografia = document.getElementById("biografiaReg").value.trim();
 
-                        // PASO 2: Obtener el género seleccionado (radio button)
+                        let valido = true;
+
+                        if (!nombre) {
+                            mostrarError("errorNombre","El nombre es requerido.");
+                            setFieldInvalid(document.getElementById("nombreReg"));
+                            valido = false;
+                        } else setFieldValid(document.getElementById("nombreReg"));
+
+                        if (!email || !validarEmail(email)) {
+                            mostrarError("errorEmail","Formato de email inválido.");
+                            setFieldInvalid(document.getElementById("emailReg"));
+                            valido = false;
+                        } else setFieldValid(document.getElementById("emailReg"));
+
+                        if (!password || password.length < 6) {
+                            mostrarError("errorPassword","La contraseña debe tener al menos 6 caracteres.");
+                            setFieldInvalid(document.getElementById("passwordReg"));
+                            valido = false;
+                        } else setFieldValid(document.getElementById("passwordReg"));
+
+                        const edadNum = Number(edad);
+                        if (!edad || isNaN(edadNum) || edadNum < 18 || edadNum > 100) {
+                            mostrarError("errorEdad","Edad inválida. Debe ser entre 18 y 100.");
+                            setFieldInvalid(document.getElementById("edadReg"));
+                            valido = false;
+                        } else setFieldValid(document.getElementById("edadReg"));
+
+                        if (!ciudad) {
+                            mostrarError("errorCiudad","Selecciona una ciudad.");
+                            setFieldInvalid(document.getElementById("ciudadReg"));
+                            valido = false;
+                        } else setFieldValid(document.getElementById("ciudadReg"));
+
+                        // género
                         let genero = "";
-                        let radios = document.getElementsByName("generoReg");
+                        const radios = document.getElementsByName("generoReg");
                         for (let radio of radios) {
                             if (radio.checked) {
                                 genero = radio.value;
                                 break;
                             }
                         }
-
-                        // PASO 3: Obtener los intereses seleccionados (checkboxes)
-                        let intereses = [];
-                        let checkboxes = document.getElementsByName("interesesReg");
-                        for (let checkbox of checkboxes) {
-                            if (checkbox.checked) {
-                                intereses.push(checkbox.value);
-                            }
+                        if (!genero) {
+                            mostrarError("errorGenero","Selecciona un género.");
+                            valido = false;
                         }
 
-                        // PASO 4: Mostrar todos los datos en el div de resultado
-                        let resultado = document.getElementById("resultadoRegistro");
+                        // intereses
+                        const intereses = [];
+                        const checkboxes = document.getElementsByName("interesesReg");
+                        for (let checkbox of checkboxes) {
+                            if (checkbox.checked) intereses.push(checkbox.value);
+                        }
+                        if (intereses.length === 0) {
+                            mostrarError("errorIntereses","Selecciona al menos un interés.");
+                            valido = false;
+                        }
+
+                        if (!valido) return false;
+
+                        // Mostrar resultado (no mostrar la contraseña)
+                        const resultado = document.getElementById("resultadoRegistro");
                         resultado.style.display = "block";
                         resultado.innerHTML = `
                             <h4>✅ ¡Registro Completado!</h4>
                             <p><strong>Nombre:</strong> ${nombre}</p>
                             <p><strong>Email:</strong> ${email}</p>
                             <p><strong>Edad:</strong> ${edad} años</p>
-                            <p><strong>Ciudad:</strong> ${ciudad}</p>
+                            <p><strong>Ciudad:</strong> ${ciudad ? ciudadTexto : "No seleccionada"}</p>
                             <p><strong>Género:</strong> ${genero}</p>
-                            <p><strong>Intereses:</strong> ${intereses.length > 0 ? intereses.join(", ") : "Ninguno seleccionado"}</p>
+                            <p><strong>Intereses:</strong> ${intereses.join(", ")}</p>
                             <p><strong>Biografía:</strong> ${biografia || "No proporcionada"}</p>
+                            <p style="font-size:0.9em;color:#666;"><em>La contraseña se ha omitido por seguridad.</em></p>
                         `;
 
+                        // Mostrar mensaje de éxito transitorio (animado)
+                        const success = document.getElementById("successTransient");
+                        success.classList.add("show");
+                        setTimeout(() => success.classList.remove("show"), 2200);
+
+                        // Reset formulario y limpiar estados visuales
+                        document.getElementById("formRegistro").reset();
+                        document.querySelectorAll(".input-field").forEach(el => clearFieldState(el));
                         return false;
+                    }
+
+                    function limpiarRegistro() {
+                        document.getElementById("formRegistro").reset();
+                        ["errorNombre","errorEmail","errorPassword","errorEdad","errorIntereses","errorCiudad","errorGenero"].forEach(id => mostrarError(id,""));
+                        document.getElementById("resultadoRegistro").style.display = "none";
+                        document.querySelectorAll(".input-field").forEach(el => clearFieldState(el));
                     }
                 </script>
             </div>
